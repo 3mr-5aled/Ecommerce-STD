@@ -1,0 +1,21 @@
+module.exports = {
+  testEnvironment: "node",
+  coverageDirectory: "coverage",
+  collectCoverageFrom: [
+    "services/**/*.js",
+    "utils/**/*.js",
+    "middlewares/**/*.js",
+    "!**/node_modules/**",
+    "!**/coverage/**",
+    "!**/tests/**",
+  ],
+  testMatch: ["**/__tests__/**/*.js", "**/?(*.)+(spec|test).js"],
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
+  testTimeout: 10000,
+  verbose: true,
+  forceExit: true,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+  setupFiles: ["<rootDir>/tests/setEnvVars.js"],
+};
