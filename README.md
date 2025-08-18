@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Course Material and FAQ for my NodeJS - Build a Full E-Commerce RESTful APIs (بالعربي) 
 
 This repo contains every course section in a single branch  and the finished project files for all the projects contained in the master branch
@@ -98,3 +99,6 @@ Choose the section branch that you study, and **final code to compare it with yo
 خلال القسم ده هضفلكم شويه دروس عن الجافا سكريبت عشان ترجعو ليها لو عايز تتاسس فيها عشان تساعدك وانت شغال في الكورس
 
 
+=======
+# Ecommerce-STD
+>>>>>>> 4740603a436e3f629bf8308360b0dbdcb6559231
