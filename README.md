@@ -1,104 +1,245 @@
-<<<<<<< HEAD
-# Course Material and FAQ for my NodeJS - Build a Full E-Commerce RESTful APIs (بالعربي) 
+# 🛍️ Ecommerce-STD - Full Stack E-Commerce RESTful API
 
-This repo contains every course section in a single branch  and the finished project files for all the projects contained in the master branch
+A comprehensive and scalable E-Commerce REST API built with Node.js, Express.js, and MongoDB. This project implements a complete e-commerce backend with modern web development practices and industry-standard features.
 
-Choose the section branch that you study, and **final code to compare it with your own code whenever something doesn't work**!
+## 🚀 Features
 
-## Join To Discord Channel For Updates [discord](https://discord.gg/e2nwBNU2q9) 
+### 🔐 Authentication & Authorization
+- JWT-based authentication
+- Role-based access control (Admin, Manager, User)
+- Password reset functionality
+- Secure user registration and login
 
+### 📦 Product Management
+- Complete CRUD operations for products
+- Product categories and subcategories
+- Brand management
+- Advanced search and filtering
+- Product reviews and ratings
+- Image upload and processing
+- Inventory management
 
-👇 **_Please read the following Frequently Asked Questions (FAQ) carefully before starting the course_** 👇
+### 🛒 Shopping Experience
+- Shopping cart functionality
+- Wishlist management
+- Coupon and discount system
+- Multiple payment methods (Cash on Delivery, Online Payment)
+- Order management and tracking
 
-## FAQ
+### 👤 User Management
+- User profiles and preferences
+- Address book management
+- Order history
+- Admin dashboard capabilities
 
-### Q1: How do I download the files?
+### 🔧 Technical Features
+- RESTful API design
+- Data validation and sanitization
+- Error handling middleware
+- File upload with image processing
+- Email notifications
+- Rate limiting and security
+- Comprehensive logging
+- Unit testing
 
-**A:** If you're new to GitHub and just want to download the entire code, hit the green button saying "Code", and then choose the "Download ZIP" option.
+## 🛠️ Tech Stack
 
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT (JSON Web Tokens)
+- **Image Processing**: Sharp
+- **Payment**: Stripe Integration
+- **Email**: Nodemailer
+- **Validation**: Express Validator
+- **Testing**: Jest
+- **Security**: Helmet, bcryptjs, express-rate-limit
 
-### Q2: I'm stuck in one of the projects. Where do I get help?
+## 📋 Prerequisites
 
-**A:** Have you actually tried to fix the problem on your own? Have you compared your code to the final code? If you failed fixing your problem, please **post a detailed description of the problem to the Q&A area of that video over at Udemy**, along with a [codepen](https://codepen.io/pen/) containing your code. You will get help there. Please don't send me a personal message or email to fix coding problems.
+Before running this project, make sure you have the following installed:
 
+- Node.js (v14 or higher)
+- MongoDB (local or cloud instance)
+- npm or yarn package manager
 
-### Q3: I want to put the project in my portfolio. Is that allowed?
+## ⚙️ Installation & Setup
 
-**A:** Absolutely! Just make sure you actually built it yourself by following the course, and that you understand what you did. What is **not allowed** is that you create your own course/videos/articles based on this course's content!
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/3mr-5aled/Ecommerce-STD.git
+   cd Ecommerce-STD
+   ```
 
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### Q4: Do you accept pull requests?
+3. **Environment Configuration**
+   
+   Create a `config.env` file in the root directory and add the following variables:
+   ```env
+   # Environment Configuration
+   NODE_ENV=development
+   PORT=8000
 
-**A:** No, for the simple reason that I want this repository to contain the _exact_ same code that is shown in the videos. However, please feel free to add an issue if you found one.
+   # Database
+   DB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/Ecommmerce_STD
+   TEST_DB_URI=mongodb://localhost:27017/ecommerce_test
 
+   # JWT Configuration
+   JWT_SECRET_KEY=your-super-secret-jwt-key-here
+   JWT_EXPIRE_TIME=90d
 
-## Course Highlights
+   # Email Configuration
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_PORT=587
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-app-password
 
-1- Project Overview
+   # Stripe Configuration
+   STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+   STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 
-خلال هذا القسم هيتم استعراض مشروع المتجر الإلكتروني اللي هيتم تنفيذه خلال هذا الكورس ... مهم جدا تتفرج عليه بتركيز عشان تكون عارف ايه المميزات اللي هتتنفذ خلال المشروع ده 
+   # Rate Limiting
+   RATE_LIMIT_WINDOW_MS=900000
+   RATE_LIMIT_MAX_REQUESTS=100
 
-2- How Web Work
+   # File Upload
+   MAX_FILE_SIZE=20
+   UPLOAD_PATH=./uploads
 
-خلال القسم ده هنتكلم شويه عن اساسيات النتورك وازاي الويب بيشتغل عشان كله يكون عنده الاساسيات اللي هنبني عليها اللي جاي وفي نفس الوقت نكون عارف احنا مكانا فين بالظبط وايه دورنا واحنا بنكتب كود
+   # Logging
+   LOG_LEVEL=info
+   ```
 
-3- Preparing Tools And Environment
+4. **Start the application**
+   ```bash
+   # Development mode
+   npm run start:dev
+   
+   # Production mode
+   npm start
+   ```
 
-خلال القسم ده هنبدأ نجهز بيئة العمل بتاعتنا والمحرر اللي هنبدأ نشتغل عليه
+## 📚 API Documentation
 
-4- Preparing Express Server And Mongodb
+The API provides the following main endpoints:
 
-خلال القسم ده هنبدأ نجهز الاكسبريس اب بتاعنا ونبدأ ننشأ السيرفر ونربط التطبيق بتاعنا بالداتا بيز وكمان هنشرح الستراكشر بتاع الملفات اللي هنشتغل بيه خلال المشروع اللي هننفذه
+### Authentication
+- `POST /api/v1/auth/signup` - User registration
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/auth/forgotPassword` - Password reset request
+- `POST /api/v1/auth/resetPassword` - Reset password
 
-5- Categories CRUD Operations
+### Products
+- `GET /api/v1/products` - Get all products (with filtering, sorting, pagination)
+- `GET /api/v1/products/:id` - Get single product
+- `POST /api/v1/products` - Create product (Admin only)
+- `PUT /api/v1/products/:id` - Update product (Admin only)
+- `DELETE /api/v1/products/:id` - Delete product (Admin only)
 
-خلال القسم ده هنبدأ التنفيذ الفعل لفيتشر الاقسام داخل المتجر الالكتروني الاقسام دي ممكن تكون ملابس او الكترونيات ..إلى آخره.
+### Categories
+- `GET /api/v1/categories` - Get all categories
+- `POST /api/v1/categories` - Create category (Admin only)
+- `PUT /api/v1/categories/:id` - Update category (Admin only)
+- `DELETE /api/v1/categories/:id` - Delete category (Admin only)
 
-6- Advanced Error Handling & Adding Validation Layer
+### Cart & Orders
+- `GET /api/v1/cart` - Get user cart
+- `POST /api/v1/cart` - Add item to cart
+- `PUT /api/v1/cart/:itemId` - Update cart item
+- `DELETE /api/v1/cart/:itemId` - Remove item from cart
+- `POST /api/v1/orders` - Create order
+- `GET /api/v1/orders` - Get user orders
 
-من السكاشن المهمة جدا اللي هنشرح فيها ازاي اكسبريس بيتعامل مع الايرورز وهنبدأ نشوف ازاي نمسك الايرورز دي ونتحكم في شكلها والشكل النهائي اللي هيرجع للمستخدم وكمان هنشوف ازاي نمسك باقي الايرورز اللي ممكن تحصل في باقي التطبيق غير اكسبريس
+## 🧪 Testing
 
-7- SubCategories CRUD & Brands CRUD Operations
+Run the test suite:
+```bash
+# Run all tests
+npm test
 
-خلال القسم ده هنبدأ ننفذ الاقسام الفرعية اللي هتكون بتنتمي للاقسام الرئيسية بمعني ان القسم الرئيسي ينتمي ليه قسم او اكثر فرعي .. بالاضافه للعمل علي فيشتر البراندات
+# Run tests in watch mode
+npm run test:watch
 
-8- Products CRUD Operations
+# Run tests with coverage
+npm run test:coverage
+```
 
-خلال القسم ده هنبدأ نشتغل علي فيتشر المنتج وهنشوف ازاي نعمل انشاء وتعديل وحذف للمنتج .. بالاضافة ازاي نعمل بحث وازاي نعمل ترتيب للمنتج سواء بسعره او عدد المبيعات للمنتج او غيره .. ازاي كمان نعمل فلتر للمنتج سواء بالقسم اللي بينتمي ليه واو العلامة التجارية وغيره
+## 🐳 Docker Support
 
-9- Upload Single And Multiple Images And Image Processing
+Run with Docker:
+```bash
+# Build and run with docker-compose
+docker-compose up --build
 
-خلال القسم ده هنشوف ازاي نعمل رفع لصوره واحدة او اكتر من صورة .. وهنشوف ازاي نحسن من العمليات اللي هتم علي الصورة عشان يحسن من الاداء .. وهنتعامل مع الايرورز اللي ممكن تظهرك لما ترفع فايل غير الصور .. وهنبدأ نضيف الصور للمنتج بتاعنا
+# Run in detached mode
+docker-compose up -d
+```
 
-10- Authentication And Authorization
+## 📁 Project Structure
 
-خلال القسم ده هنشرح عمليه المصادقة بشكل تفصيلي وهنشوف ازاي تسجيل الدخول وانشاء الحساب ونسيت كلمه المرور وازاي بتعمل التوكن وازاي بنعمل عمليه التحقق عليه ..كمان هنشتغل علي صلاحيات المستخدمين وهيكون عندنا ادمن ومانجر ويوزر عادي وكل واحد ليه صلاحيات مختلفة عن التاني... القسم ده مهم جدا وهتستفاد منه جدا
+```
+├── config/                 # Configuration files
+├── middlewares/            # Custom middleware functions
+├── models/                 # MongoDB/Mongoose models
+├── routes/                 # API route definitions
+├── services/               # Business logic layer
+├── utils/                  # Utility functions and helpers
+├── uploads/                # File upload directory
+├── tests/                  # Test files
+├── postman/               # Postman collection for API testing
+├── server.js              # Application entry point
+├── package.json           # Dependencies and scripts
+└── README.md              # Project documentation
+```
 
-11- Reviews, Wishlist And User Addresses
+## 🔒 Security Features
 
-خلال القسم ده هنبدأ نشتغل علي التقييمات وهنشوف ازاي هنمكن المتسخدم انه يضيف تقييم علي المنتجات وكمان هنحسب متوسط عدد التقييمات علي المنتج الواحد بالاضافة للعدد الكلي للتقيمات علي المنتج الواحد ، كمان هنشرح ازاي نمكن المسخدم انه يضيف منتج لقائمة المفضلة وفي نفس الوقت يقدر يحذفه ، كمان هنمكن المستخدم من انه يضيف عنوان لدفتر العناوين بتاعه يقدر يستخدمه لما يجي يطلب اوردر .
+- Input validation and sanitization
+- SQL injection protection
+- XSS protection
+- Rate limiting
+- CORS configuration
+- Helmet for security headers
+- JWT token expiration
+- Password hashing with bcrypt
 
-12- Coupons And Shopping Cart
+## 🚀 Deployment
 
-خلال القسم ده هنبدأ نمكن الادمن من انه ينشأ الكوبونات وكل كوبون بيكون ليه تاريخ معين ينتهي فيه ونسبة خصم معينة بيحددها الادمن ... والمستخدم هيقدر يستخدم الكوبون ده عشان يتسفاد من الخصم .. كمان هنمكن المستخدم من انه ينشأ سلة المنتجات اللي هيبدأ يضيف فيها المنتجات اللي عايز يشتريها ويعدل يختار ويعدل في كمية المنتجات لو متاح كمية منها في المخزن بالاضافة انه يقدر يضيف كوبون خصم علي السلة .
+The application is ready for deployment on platforms like:
+- Heroku
+- AWS EC2
+- Digital Ocean
+- Vercel
+- Railway
 
-13- Cash And Online Orders, Online Payments And Deployments
+## 🤝 Contributing
 
-خلال القسم ده هنبدأ نشتغل علي الاورد ر او الطلبية سواء الاوردر ده هيتم دفعه كاش او عند الاستلام او الاوردر ده هيتم دفعه من خلال بطاقة دفع او محفظة الكترنية زي ابل باي او غيره .. هيتم الربط مع بوابة الدفع ونشوف ايه وسائل الدفع اللي بتوفرها بوابة الدفع وهنعمل عميلة الدفع من خلالها ... وهنشوف ازاي بنشوف عملية الدفع نجحت ولا لا .. وازاي نعمل اوردر في حالة نجاح عملية الدفع .. هنتكلم بالتفصيل عن الدفع الكاش والدفع الالكتروني .. وفي الاخر هنرفع التطبيق علي هيروكو عشان تقدر تشاركه مع الفرونت اند او تحط اللينك في البرورتفوليو بتاعك
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-14- Security
+## 📝 License
 
-خلال القسم ده هنتكلم شويه عن وسائل الامان اللي ممكن تستخدمها عشان تأمن التطبيق بتاعك
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-15- Enhancements
+## 📞 Contact
 
-خلال القسم ده هنضيف فيه التحسينات اللي هتتضاف في الكورس ... بالاضافة لو فيه مشاكل ظهرت هنسجلها فيديو ونضيفه في السكشن ده
+**Ahmed Khaled** - [@3mr-5aled](https://github.com/3mr-5aled)
 
-16- Appendix
+Project Link: [https://github.com/3mr-5aled/Ecommerce-STD](https://github.com/3mr-5aled/Ecommerce-STD)
 
-خلال القسم ده هضفلكم شويه دروس عن الجافا سكريبت عشان ترجعو ليها لو عايز تتاسس فيها عشان تساعدك وانت شغال في الكورس
+## 🙏 Acknowledgments
 
+- Thanks to all contributors who have helped this project grow
+- Inspired by modern e-commerce platforms and best practices
+- Built following Node.js and Express.js community standards
 
-=======
-# Ecommerce-STD
->>>>>>> 4740603a436e3f629bf8308360b0dbdcb6559231
+---
+
+⭐ **Star this repository if you find it helpful!** ⭐
