@@ -1,34 +1,25 @@
 const asyncHandler = require("express-async-handler");
-const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
 const bcrypt = require("bcryptjs");
-
 const factory = require("./handlers.factory");
 const ApiError = require("../utils/apiError.utils");
-const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const {
+  uploadSingleImage,
+  resizeSingleImage,
+} = require("../middlewares/uploadImageMiddleware");
 const createToken = require("../utils/createToken.utils");
 const User = require("../models/user.model");
 
 // Upload single image
 exports.uploadUserImage = uploadSingleImage("profileImg");
 
-// Image processing
-exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
-
-  if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/users/${filename}`);
-
-    // Save image into our db
-    req.body.profileImg = filename;
-  }
-
-  next();
-});
+exports.resizeImage = resizeSingleImage(
+  "user",
+  "jpeg",
+  95,
+  600,
+  600,
+  "profileImg"
+);
 
 // @desc    Get list of users
 // @route   GET /api/v1/users

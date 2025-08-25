@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 
 const {
   getCategoryValidator,
   createCategoryValidator,
   updateCategoryValidator,
   deleteCategoryValidator,
-} = require('../utils/validators/category.validator');
+} = require("../utils/validators/category.validator");
 
 const {
   getCategories,
@@ -15,34 +15,34 @@ const {
   deleteCategory,
   uploadCategoryImage,
   resizeImage,
-} = require('../services/category.service');
+} = require("../services/category.service");
 
-const authService = require('../services/auth.service');
+const authService = require("../services/auth.service");
 
-const subcategoriesRoute = require('./subCategory.route');
+const subcategoriesRoute = require("./subCategory.route");
 
 const router = express.Router();
 
 // Nested route
-router.use('/:categoryId/subcategories', subcategoriesRoute);
+router.use("/:categoryId/subcategories", subcategoriesRoute);
 
 router
-  .route('/')
+  .route("/")
   .get(getCategories)
   .post(
     authService.protect,
-    authService.allowedTo('admin', 'manager'),
+    authService.allowedTo("admin", "manager"),
     uploadCategoryImage,
     resizeImage,
     createCategoryValidator,
     createCategory
   );
 router
-  .route('/:id')
+  .route("/:id")
   .get(getCategoryValidator, getCategory)
   .put(
     authService.protect,
-    authService.allowedTo('admin', 'manager'),
+    authService.allowedTo("admin", "manager"),
     uploadCategoryImage,
     resizeImage,
     updateCategoryValidator,
@@ -50,7 +50,7 @@ router
   )
   .delete(
     authService.protect,
-    authService.allowedTo('admin'),
+    authService.allowedTo("admin"),
     deleteCategoryValidator,
     deleteCategory
   );

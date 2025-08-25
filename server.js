@@ -13,7 +13,7 @@ const xss = require("xss-clean");
 
 dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError.utils");
-const globalError = require("./middlewares/errorMiddleware");
+const globalError = require("./middlewares/error.middleware");
 const dbConnection = require("./config/database");
 // Routes
 const mountRoutes = require("./routes");
