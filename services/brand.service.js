@@ -1,15 +1,23 @@
 const factory = require("./handlers.factory");
 const {
   uploadSingleImage,
-  resizeSingleImage,
-} = require("../middlewares/uploadImageMiddleware");
+  resizeImages,
+} = require("../middlewares/uploadImage.middleware");
 const Brand = require("../models/brand.model");
 
 // Upload single image
 exports.uploadBrandImage = uploadSingleImage("image");
 
 // Image processing
-exports.resizeImage = resizeSingleImage("brand", "jpeg", 95, 600, 600);
+exports.resizeImage = resizeImages({
+  fieldName: "image",
+  uploadPath: "brand",
+  mimetype: "jpeg",
+  quality: 95,
+  imageLength: 600,
+  imageWidth: 600,
+  isArray: false,
+});
 
 // @desc    Get list of brands
 // @route   GET /api/v1/brands

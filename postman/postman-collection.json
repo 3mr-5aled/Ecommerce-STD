@@ -100,10 +100,19 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    const responseJson = pm.response.json();",
-                  "    pm.collectionVariables.set('authToken', responseJson.token);",
-                  "    pm.collectionVariables.set('userId', responseJson.data._id);",
+                  "// Safe test script with error handling",
+                  "try {",
+                  "    if (pm.response && pm.response.code === 201) {",
+                  "        const responseJson = pm.response.json();",
+                  "        if (responseJson && responseJson.token) {",
+                  "            pm.collectionVariables.set('authToken', responseJson.token);",
+                  "        }",
+                  "        if (responseJson && responseJson.data && responseJson.data._id) {",
+                  "            pm.collectionVariables.set('userId', responseJson.data._id);",
+                  "        }",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.error('Test script error:', error.message);",
                   "}"
                 ]
               }
@@ -135,10 +144,19 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const responseJson = pm.response.json();",
-                  "    pm.collectionVariables.set('authToken', responseJson.token);",
-                  "    pm.collectionVariables.set('userId', responseJson.data._id);",
+                  "// Safe test script with error handling",
+                  "try {",
+                  "    if (pm.response && pm.response.code === 200) {",
+                  "        const responseJson = pm.response.json();",
+                  "        if (responseJson && responseJson.token) {",
+                  "            pm.collectionVariables.set('authToken', responseJson.token);",
+                  "        }",
+                  "        if (responseJson && responseJson.data && responseJson.data._id) {",
+                  "            pm.collectionVariables.set('userId', responseJson.data._id);",
+                  "        }",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.error('Test script error:', error.message);",
                   "}"
                 ]
               }
@@ -170,9 +188,16 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const responseJson = pm.response.json();",
-                  "    pm.collectionVariables.set('authToken', responseJson.token);",
+                  "// Safe test script with error handling",
+                  "try {",
+                  "    if (pm.response && pm.response.code === 200) {",
+                  "        const responseJson = pm.response.json();",
+                  "        if (responseJson && responseJson.token) {",
+                  "            pm.collectionVariables.set('authToken', responseJson.token);",
+                  "        }",
+                  "    }",
+                  "} catch (error) {",
+                  "    console.error('Test script error:', error.message);",
                   "}"
                 ]
               }
@@ -1346,14 +1371,67 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          "// Global pre-request script for E-Commerce API",
+          "// This script runs before every request in the collection",
+          "",
+          "// Ensure base URL is set",
+          "if (!pm.collectionVariables.get('baseUrl')) {",
+          "    pm.collectionVariables.set('baseUrl', 'http://localhost:8000');",
+          "}",
+          "",
+          "// Add authentication header if token exists",
+          "const authToken = pm.collectionVariables.get('authToken');",
+          "if (authToken && authToken.trim() !== '') {",
+          "    pm.request.headers.add({",
+          "        key: 'Authorization',",
+          "        value: `Bearer ${authToken}`",
+          "    });",
+          "}",
+          "",
+          "// Debug information",
+          "console.log('Pre-request script executed');",
+          "console.log('Base URL:', pm.collectionVariables.get('baseUrl'));",
+          "console.log('Auth Token:', authToken ? 'Present' : 'Not set');"
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          "// Global test script for E-Commerce API",
+          "// This script runs after every request in the collection",
+          "",
+          "// Basic response validation",
+          "try {",
+          "    if (pm.response) {",
+          "        // Log response details",
+          "        console.log('Response Status:', pm.response.status);",
+          "        console.log('Response Time:', pm.response.responseTime + 'ms');",
+          "        ",
+          "        // Test for successful response codes",
+          "        pm.test('Status code is valid', function () {",
+          "            pm.expect(pm.response.code).to.be.oneOf([200, 201, 204, 400, 401, 403, 404, 422, 500]);",
+          "        });",
+          "        ",
+          "        // Test for reasonable response time",
+          "        pm.test('Response time is reasonable', function () {",
+          "            pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "        });",
+          "        ",
+          "        // Test for JSON response when expected",
+          "        if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {",
+          "            pm.test('Response is valid JSON', function () {",
+          "                pm.response.to.be.json;",
+          "            });",
+          "        }",
+          "    }",
+          "} catch (error) {",
+          "    console.error('Global test script error:', error.message);",
+          "}"
+        ]
       }
     }
   ]

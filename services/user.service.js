@@ -4,22 +4,23 @@ const factory = require("./handlers.factory");
 const ApiError = require("../utils/apiError.utils");
 const {
   uploadSingleImage,
-  resizeSingleImage,
-} = require("../middlewares/uploadImageMiddleware");
+  resizeImages,
+} = require("../middlewares/uploadImage.middleware");
 const createToken = require("../utils/createToken.utils");
 const User = require("../models/user.model");
 
 // Upload single image
 exports.uploadUserImage = uploadSingleImage("profileImg");
 
-exports.resizeImage = resizeSingleImage(
-  "user",
-  "jpeg",
-  95,
-  600,
-  600,
-  "profileImg"
-);
+exports.resizeImage = resizeImages({
+  fieldName: "profileImg",
+  uploadPath: "user",
+  mimetype: "jpeg",
+  quality: 95,
+  imageLength: 600,
+  imageWidth: 600,
+  isArray: false,
+});
 
 // @desc    Get list of users
 // @route   GET /api/v1/users

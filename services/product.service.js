@@ -1,6 +1,6 @@
 const {
   uploadMixOfImages,
-  resizeMixOfImages,
+  resizeImages,
 } = require("../middlewares/uploadImage.middleware");
 const factory = require("./handlers.factory");
 const Product = require("../models/product.model");
@@ -16,7 +16,7 @@ exports.uploadProductImages = uploadMixOfImages([
   },
 ]);
 
-exports.resizeProductImages = resizeMixOfImages([
+exports.resizeProductImages = resizeImages([
   {
     fieldName: "imageCover",
     mimetype: "jpeg",
@@ -25,6 +25,7 @@ exports.resizeProductImages = resizeMixOfImages([
     imageWidth: 1333,
     isArray: false,
     uploadPath: "product",
+    customName: "cover",
   },
   {
     fieldName: "images",

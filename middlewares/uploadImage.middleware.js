@@ -35,68 +35,105 @@ exports.uploadSingleImage = (fieldName) => multerOptions().single(fieldName);
 exports.uploadMixOfImages = (arrayOfFields) =>
   multerOptions().fields(arrayOfFields);
 
-exports.resizeSingleImage = (
-  uploadPath,
-  mimetype,
-  quality,
-  imageLength,
-  imageWidth,
-  fieldName = "image"
-) =>
+/**
+ * Unified image resizing middleware that handles both single and multiple images
+ * @param {Object|Array} config - Configuration for single image or array of configurations for multiple images
+ * @param {string} config.fieldName - The name of the form field containing the image
+ * @param {string} config.uploadPath - The file system path where processed images will be stored
+ * @param {string} config.mimetype - The expected MIME type of the uploaded image
+ * @param {number} config.quality - The compression quality for the processed image (0-100)
+ * @param {number} config.imageLength - The target length/height for image resizing
+ * @param {number} config.imageWidth - The target width for image resizing
+ * @param {boolean} [config.isArray=false] - Whether the field accepts multiple images as an array
+ * @param {string} [config.customName=""] - Custom name to append to filename
+ * @returns {Function} Express middleware function
+ */
+exports.resizeImages = (config) =>
   asyncHandler(async (req, res, next) => {
-    /**
-     * Generates a unique filename for a product image using UUID and timestamp.
-     * The filename follows the pattern: product-{uuid}-{timestamp}.jpeg
-     * @type {string} A unique filename string for product image storage
-     */
-    const filename = `${uploadPath}-${uuidv4()}-${Date.now()}.jpeg`;
+    // Handle single image configuration (legacy support)
+    if (
+      typeof config === "string" ||
+      (config && !Array.isArray(config) && !config.fieldName)
+    ) {
+      // Legacy single image support: resizeImages(uploadPath, mimetype, quality, imageLength, imageWidth, fieldName, customName)
+      const [
+        uploadPath,
+        mimetype,
+        quality,
+        imageLength,
+        imageWidth,
+        fieldName = "image",
+        customName = "",
+      ] = arguments;
 
-    if (req.file) {
-      await sharp(req.file.buffer)
-        .resize(imageLength, imageWidth)
-        .toFormat(mimetype)
-        .jpeg({ quality: quality })
-        .toFile(`uploads/${uploadPath}s/${filename}`);
+      let customNamePrefix = "";
+      if (customName) {
+        customNamePrefix = `-${customName}`;
+      }
+      const filename = `${uploadPath}-${uuidv4()}-${Date.now()}${customNamePrefix}.jpeg`;
 
-      // Save image into our db
-      req.body[fieldName] = filename;
+      if (req.file) {
+        await sharp(req.file.buffer)
+          .resize(imageLength, imageWidth)
+          .toFormat(mimetype)
+          .jpeg({ quality: quality })
+          .toFile(`uploads/${uploadPath}s/${filename}`);
+
+        // Save image into our db
+        req.body[fieldName] = filename;
+      }
+
+      return next();
     }
 
-    next();
-  });
+    // Handle new configuration format
+    const configs = Array.isArray(config) ? config : [config];
 
-exports.resizeMixOfImages = (configs) =>
-  asyncHandler(async (req, res, next) => {
-    if (!req.files) {
+    // Check if we have files to process
+    const hasFiles =
+      req.file || (req.files && Object.keys(req.files).length > 0);
+    if (!hasFiles) {
       return next();
     }
 
     // Process each field configuration
     await Promise.all(
-      configs.map(async (config) => {
-        /**
-         * Configuration object for image upload middleware
-         * @typedef {Object} UploadImageConfig
-         * @property {string} fieldName - The name of the form field containing the image
-         * @property {string} mimetype - The expected MIME type of the uploaded image
-         * @property {number} quality - The compression quality for the processed image (0-100)
-         * @property {number} imageLength - The target length/height for image resizing
-         * @property {number} imageWidth - The target width for image resizing
-         * @property {boolean} isArray - Whether the field accepts multiple images as an array
-         * @property {string} uploadPath - The file system path where processed images will be stored
-         */
+      configs.map(async (configItem) => {
         const {
           fieldName,
           mimetype,
           quality,
           imageLength,
           imageWidth,
-          isArray,
+          isArray = false,
           uploadPath,
-        } = config;
-        const folderPath = uploadPath || `${fieldName}s`;
+          customName = "",
+        } = configItem;
 
-        if (req.files[fieldName]) {
+        const folderPath = uploadPath || `${fieldName}s`;
+        let customNamePrefix = "";
+        if (customName) {
+          customNamePrefix = `-${customName}`;
+        }
+
+        // Handle single file upload (from req.file)
+        if (req.file && !req.files) {
+          const filename = `${
+            uploadPath || fieldName
+          }-${uuidv4()}-${Date.now()}${customNamePrefix}.jpeg`;
+
+          await sharp(req.file.buffer)
+            .resize(imageLength, imageWidth)
+            .toFormat(mimetype)
+            .jpeg({ quality: quality })
+            .toFile(`uploads/${folderPath}s/${filename}`);
+
+          req.body[fieldName] = filename;
+          return;
+        }
+
+        // Handle multiple files upload (from req.files)
+        if (req.files && req.files[fieldName]) {
           if (isArray) {
             // Handle multiple images (array field)
             req.body[fieldName] = [];
@@ -104,7 +141,7 @@ exports.resizeMixOfImages = (configs) =>
               req.files[fieldName].map(async (file, index) => {
                 const filename = `${fieldName}-${uuidv4()}-${Date.now()}-${
                   index + 1
-                }.jpeg`;
+                }${customNamePrefix}.jpeg`;
 
                 await sharp(file.buffer)
                   .resize(imageLength, imageWidth)
@@ -116,8 +153,8 @@ exports.resizeMixOfImages = (configs) =>
               })
             );
           } else {
-            // Handle single image
-            const filename = `${fieldName}-${uuidv4()}-${Date.now()}.jpeg`;
+            // Handle single image from multiple files
+            const filename = `${fieldName}-${uuidv4()}-${Date.now()}${customNamePrefix}.jpeg`;
 
             await sharp(req.files[fieldName][0].buffer)
               .resize(imageLength, imageWidth)
@@ -133,3 +170,7 @@ exports.resizeMixOfImages = (configs) =>
 
     next();
   });
+
+// Legacy support - alias for backward compatibility
+exports.resizeSingleImage = (...args) => exports.resizeImages(...args);
+exports.resizeMixOfImages = (configs) => exports.resizeImages(configs);

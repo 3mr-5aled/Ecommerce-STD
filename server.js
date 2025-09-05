@@ -106,6 +106,21 @@ if (process.env.NODE_ENV !== "test") {
     console.log(`App running running on port ${PORT}`);
   });
 
+  // Handle port already in use error
+  server.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.error(`❌ Port ${PORT} is already in use!`);
+      console.log(
+        `💡 Try running: taskkill /PID $(netstat -ano | findstr :${PORT} | head -1 | awk '{print $5}') /F`
+      );
+      console.log(`💡 Or change the PORT in your config.env file`);
+      process.exit(1);
+    } else {
+      console.error(`Server error: ${err.message}`);
+      process.exit(1);
+    }
+  });
+
   // Handle rejection outside express
   process.on("unhandledRejection", (err) => {
     console.error(`UnhandledRejection Errors: ${err.name} | ${err.message}`);

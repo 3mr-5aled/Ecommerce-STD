@@ -1,15 +1,23 @@
 const factory = require("./handlers.factory");
 const {
   uploadSingleImage,
-  resizeSingleImage,
-} = require("../middlewares/uploadImageMiddleware");
+  resizeImages,
+} = require("../middlewares/uploadImage.middleware");
 const Category = require("../models/category.model");
 
 // Upload single image
 exports.uploadCategoryImage = uploadSingleImage("image");
 
 // Image processing
-exports.resizeImage = resizeSingleImage("category", "jpeg", 95, 600, 600);
+exports.resizeImage = resizeImages({
+  fieldName: "image",
+  uploadPath: "category",
+  mimetype: "jpeg",
+  quality: 95,
+  imageLength: 600,
+  imageWidth: 600,
+  isArray: false,
+});
 
 // @desc    Get list of categories
 // @route   GET /api/v1/categories
