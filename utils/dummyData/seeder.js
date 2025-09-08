@@ -1,5 +1,5 @@
 const fs = require("fs");
-require("colors");
+require("variants");
 const dotenv = require("dotenv");
 const Product = require("../../models/product.model");
 const dbConnection = require("../../config/database");

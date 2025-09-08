@@ -9,6 +9,11 @@ exports.createReviewValidator = [
     .withMessage("ratings value required")
     .isFloat({ min: 1, max: 5 })
     .withMessage("Ratings value must be between 1 to 5"),
+  check("description")
+    .notEmpty()
+    .withMessage("Review description required")
+    .isLength({ max: 500 })
+    .withMessage("Review description must be less than 500 characters"),
   check("user").isMongoId().withMessage("Invalid Review id format"),
   check("product")
     .isMongoId()
@@ -44,7 +49,7 @@ exports.updateReviewValidator = [
         if (!review) {
           return Promise.reject(new Error(`There is no review with id ${val}`));
         }
-
+        // ._id because user is populated with the name
         if (review.user._id.toString() !== req.user._id.toString()) {
           return Promise.reject(
             new Error(`Your are not allowed to perform this action`)

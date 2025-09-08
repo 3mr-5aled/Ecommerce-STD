@@ -44,6 +44,7 @@ exports.getAll = (Model, modelName = "") =>
       .json({ results: documents.length, paginationResult, data: documents });
   });
 
+// get specific document by id + populate options
 exports.getOne = (Model, populationOpt) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;

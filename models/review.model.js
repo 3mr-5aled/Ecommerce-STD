@@ -6,6 +6,11 @@ const reviewSchema = new mongoose.Schema(
     title: {
       type: String,
     },
+    description: {
+      type: String,
+      required: [true, "Review description required"],
+      trim: true,
+    },
     ratings: {
       type: Number,
       min: [1, "Min ratings value is 1.0"],
@@ -44,6 +49,7 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
     {
       $group: {
         _id: "product",
+        // Calculate average ratings and total quantity (number of ratings) using mongoDB operators
         avgRatings: { $avg: "$ratings" },
         ratingsQuantity: { $sum: 1 },
       },
@@ -64,12 +70,10 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
   }
 };
 
-reviewSchema.post("save", async function () {
-  await this.constructor.calcAverageRatingsAndQuantity(this.product);
-});
-
-reviewSchema.post("remove", async function () {
-  await this.constructor.calcAverageRatingsAndQuantity(this.product);
+// Call calcAverageRatingsAndQuantity after save
+reviewSchema.post("save", function () {
+  // this points to current review
+  this.constructor.calcAverageRatingsAndQuantity(this.product);
 });
 
 module.exports = mongoose.model("Review", reviewSchema);

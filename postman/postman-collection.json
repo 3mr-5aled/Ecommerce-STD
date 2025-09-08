@@ -641,7 +641,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"iPhone 14 Pro\",\n  \"description\": \"The latest iPhone with advanced camera system and A16 Bionic chip\",\n  \"quantity\": 50,\n  \"price\": 999.99,\n  \"priceAfterDiscount\": 899.99,\n  \"colors\": [\"Deep Purple\", \"Gold\", \"Silver\", \"Space Black\"],\n  \"imageCover\": \"iphone14pro-cover.jpg\",\n  \"images\": [\"iphone14pro-1.jpg\", \"iphone14pro-2.jpg\", \"iphone14pro-3.jpg\"],\n  \"category\": \"{{categoryId}}\",\n  \"subcategories\": [\"{{subCategoryId}}\"],\n  \"brand\": \"{{brandId}}\",\n  \"ratingsAverage\": 4.8,\n  \"ratingsQuantity\": 120\n}"
+              "raw": "{\n  \"title\": \"iPhone 14 Pro\",\n  \"description\": \"The latest iPhone with advanced camera system and A16 Bionic chip\",\n  \"quantity\": 50,\n  \"price\": 999.99,\n  \"priceAfterDiscount\": 899.99,\n  \"variants\": [\"Deep Purple\", \"Gold\", \"Silver\", \"Space Black\"],\n  \"imageCover\": \"iphone14pro-cover.jpg\",\n  \"images\": [\"iphone14pro-1.jpg\", \"iphone14pro-2.jpg\", \"iphone14pro-3.jpg\"],\n  \"category\": \"{{categoryId}}\",\n  \"subcategories\": [\"{{subCategoryId}}\"],\n  \"brand\": \"{{brandId}}\",\n  \"ratingsAverage\": 4.8,\n  \"ratingsQuantity\": 120\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/products",
@@ -1196,7 +1196,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"color\": \"Deep Purple\"\n}"
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variant\": \"Deep Purple\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/cart",

@@ -202,7 +202,7 @@ The collection uses these variables that are automatically set:
   "quantity": 50,
   "price": 999.99,
   "priceAfterDiscount": 899.99,
-  "colors": ["Deep Purple", "Gold", "Silver"],
+  "variants": ["Deep Purple", "Gold", "Silver"],
   "category": "{{categoryId}}",
   "brand": "{{brandId}}"
 }

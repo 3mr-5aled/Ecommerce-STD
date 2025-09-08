@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { name: appName } = require("./appInfo");
 
 // Nodemailer
 const sendEmail = async (options) => {
@@ -15,7 +16,7 @@ const sendEmail = async (options) => {
 
   // 2) Define email options (like from, to, subject, email content)
   const mailOpts = {
-    from: "E-shop App <progahmedelsayed@gmail.com>",
+    from: `${appName} <${process.env.EMAIL_USER}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,

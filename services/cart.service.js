@@ -5,6 +5,18 @@ const Product = require("../models/product.model");
 const Coupon = require("../models/coupon.model");
 const Cart = require("../models/cart.model");
 
+/**
+ * Calculates the total price of all items in a shopping cart.
+ * Updates the cart object with the calculated total price and resets any discount pricing.
+ *
+ * @param {Object} cart - The shopping cart object
+ * @param {Array} cart.cartItems - Array of cart items
+ * @param {number} cart.cartItems[].quantity - Quantity of the item
+ * @param {number} cart.cartItems[].price - Price per unit of the item
+ * @param {number} cart.totalCartPrice - Total price of all items (will be updated)
+ * @param {number|undefined} cart.totalPriceAfterDiscount - Discounted total price (will be reset to undefined)
+ * @returns {number} The calculated total price of all cart items
+ */
 const calcTotalCartPrice = (cart) => {
   let totalPrice = 0;
   cart.cartItems.forEach((item) => {
@@ -19,7 +31,7 @@ const calcTotalCartPrice = (cart) => {
 // @route   POST /api/v1/cart
 // @access  Private/User
 exports.addProductToCart = asyncHandler(async (req, res, next) => {
-  const { productId, color } = req.body;
+  const { productId, variant } = req.body;
   const product = await Product.findById(productId);
 
   // 1) Get Cart for logged user
@@ -29,22 +41,24 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
     // create cart fot logged user with product
     cart = await Cart.create({
       user: req.user._id,
-      cartItems: [{ product: productId, color, price: product.price }],
+      cartItems: [{ product: productId, variant, price: product.price }],
     });
   } else {
     // product exist in cart, update product quantity
     const productIndex = cart.cartItems.findIndex(
-      (item) => item.product.toString() === productId && item.color === color
+      (item) =>
+        item.product.toString() === productId && item.variant === variant
     );
 
     if (productIndex > -1) {
-      const cartItem = cart.cartItems[productIndex];
-      cartItem.quantity += 1;
-
-      cart.cartItems[productIndex] = cartItem;
+      cart.cartItems[productIndex].quantity += 1;
     } else {
       // product not exist in cart,  push product to cartItems array
-      cart.cartItems.push({ product: productId, color, price: product.price });
+      cart.cartItems.push({
+        product: productId,
+        variant,
+        price: product.price,
+      });
     }
   }
 
@@ -67,6 +81,7 @@ exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
   if (!cart) {
+    // use next() to send error to error handling middleware and skip the rest of code
     return next(
       new ApiError(`There is no cart for this user id : ${req.user._id}`, 404)
     );
@@ -86,6 +101,7 @@ exports.removeSpecificCartItem = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOneAndUpdate(
     { user: req.user._id },
     {
+      // remove by item id not product id
       $pull: { cartItems: { _id: req.params.itemId } },
     },
     { new: true }
@@ -121,12 +137,12 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
   }
 
   const itemIndex = cart.cartItems.findIndex(
+    // mongodb object id to string
     (item) => item._id.toString() === req.params.itemId
   );
+
   if (itemIndex > -1) {
-    const cartItem = cart.cartItems[itemIndex];
-    cartItem.quantity = quantity;
-    cart.cartItems[itemIndex] = cartItem;
+    cart.cartItems[itemIndex].quantity = quantity;
   } else {
     return next(
       new ApiError(`there is no item for this id :${req.params.itemId}`, 404)
@@ -148,7 +164,7 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/cart/applyCoupon
 // @access  Private/User
 exports.applyCoupon = asyncHandler(async (req, res, next) => {
-  // 1) Get coupon based on coupon name
+  // 1) Get coupon based on coupon name and check if it valid (greater than current date)
   const coupon = await Coupon.findOne({
     name: req.body.coupon,
     expire: { $gt: Date.now() },
