@@ -18,8 +18,8 @@ const orderSchema = new mongoose.Schema(
         price: Number,
       },
     ],
-
-    taxPrice: {
+    // tax percentage
+    tax: {
       type: Number,
       default: 0,
     },
@@ -64,6 +64,7 @@ orderSchema.pre(/^find/, function (next) {
     select: "title imageCover ",
   });
 
+  // we use next() to continue to the next middleware
   next();
 });
 

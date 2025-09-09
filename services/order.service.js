@@ -13,7 +13,7 @@ const Order = require("../models/order.model");
 // @access  Protected/User
 exports.createCashOrder = asyncHandler(async (req, res, next) => {
   // app settings
-  const taxPrice = 0;
+  const tax = 0;
   const shippingPrice = 0;
 
   // 1) Get cart depend on cartId
@@ -24,10 +24,22 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Check if cart has items
+  if (!cart.cartItems || cart.cartItems.length === 0) {
+    return next(new ApiError("Cart is empty", 400));
+  }
+
+  // Validate shipping address
+  if (!req.body.shippingAddress) {
+    return next(new ApiError("Shipping address is required", 400));
+  }
+
   // 2) Get order price depend on cart price "Check if coupon apply"
   const cartPrice = cart.totalPriceAfterDiscount
     ? cart.totalPriceAfterDiscount
     : cart.totalCartPrice;
+
+  const taxPrice = (tax * cartPrice) / 100;
 
   const totalOrderPrice = cartPrice + taxPrice + shippingPrice;
 
@@ -47,7 +59,13 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
         update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
       },
     }));
-    await Product.bulkWrite(bulkOption, {});
+
+    const bulkResult = await Product.bulkWrite(bulkOption, {});
+
+    // Check if all products were updated successfully
+    if (bulkResult.modifiedCount !== cart.cartItems.length) {
+      return next(new ApiError("Some products could not be updated", 400));
+    }
 
     // 5) Clear cart depend on cartId
     await Cart.findByIdAndDelete(req.params.cartId);
@@ -56,6 +74,7 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
   res.status(201).json({ status: "success", data: order });
 });
 
+// filter orders for logged user and admin-manager can get all orders
 exports.filterOrderForLoggedUser = asyncHandler(async (req, res, next) => {
   if (req.user.role === "user") req.filterObj = { user: req.user._id };
   next();
@@ -121,7 +140,7 @@ exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
 // @access  Protected/User
 exports.checkoutSession = asyncHandler(async (req, res, next) => {
   // app settings
-  const taxPrice = 0;
+  const tax = 0;
   const shippingPrice = 0;
 
   // 1) Get cart depend on cartId
@@ -136,6 +155,8 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   const cartPrice = cart.totalPriceAfterDiscount
     ? cart.totalPriceAfterDiscount
     : cart.totalCartPrice;
+
+  const taxPrice = (tax * cartPrice) / 100;
 
   const totalOrderPrice = cartPrice + taxPrice + shippingPrice;
 
