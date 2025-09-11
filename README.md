@@ -5,12 +5,14 @@ A comprehensive and scalable E-Commerce REST API built with Node.js, Express.js,
 ## 🚀 Features
 
 ### 🔐 Authentication & Authorization
+
 - JWT-based authentication
 - Role-based access control (Admin, Manager, User)
 - Password reset functionality
 - Secure user registration and login
 
 ### 📦 Product Management
+
 - Complete CRUD operations for products
 - Product categories and subcategories
 - Brand management
@@ -20,6 +22,7 @@ A comprehensive and scalable E-Commerce REST API built with Node.js, Express.js,
 - Inventory management
 
 ### 🛒 Shopping Experience
+
 - Shopping cart functionality
 - Wishlist management
 - Coupon and discount system
@@ -27,12 +30,14 @@ A comprehensive and scalable E-Commerce REST API built with Node.js, Express.js,
 - Order management and tracking
 
 ### 👤 User Management
+
 - User profiles and preferences
 - Address book management
 - Order history
 - Admin dashboard capabilities
 
 ### 🔧 Technical Features
+
 - RESTful API design
 - Data validation and sanitization
 - Error handling middleware
@@ -66,19 +71,22 @@ Before running this project, make sure you have the following installed:
 ## ⚙️ Installation & Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/3mr-5aled/Ecommerce-STD.git
    cd Ecommerce-STD
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Environment Configuration**
-   
+
    Create a `config.env` file in the root directory and add the following variables:
+
    ```env
    # Environment Configuration
    NODE_ENV=development
@@ -115,10 +123,11 @@ Before running this project, make sure you have the following installed:
    ```
 
 4. **Start the application**
+
    ```bash
    # Development mode
    npm run start:dev
-   
+
    # Production mode
    npm start
    ```
@@ -128,12 +137,14 @@ Before running this project, make sure you have the following installed:
 The API provides the following main endpoints:
 
 ### Authentication
+
 - `POST /api/v1/auth/signup` - User registration
 - `POST /api/v1/auth/login` - User login
 - `POST /api/v1/auth/forgotPassword` - Password reset request
 - `POST /api/v1/auth/resetPassword` - Reset password
 
 ### Products
+
 - `GET /api/v1/products` - Get all products (with filtering, sorting, pagination)
 - `GET /api/v1/products/:id` - Get single product
 - `POST /api/v1/products` - Create product (Admin only)
@@ -141,12 +152,14 @@ The API provides the following main endpoints:
 - `DELETE /api/v1/products/:id` - Delete product (Admin only)
 
 ### Categories
+
 - `GET /api/v1/categories` - Get all categories
 - `POST /api/v1/categories` - Create category (Admin only)
 - `PUT /api/v1/categories/:id` - Update category (Admin only)
 - `DELETE /api/v1/categories/:id` - Delete category (Admin only)
 
 ### Cart & Orders
+
 - `GET /api/v1/cart` - Get user cart
 - `POST /api/v1/cart` - Add item to cart
 - `PUT /api/v1/cart/:itemId` - Update cart item
@@ -157,6 +170,7 @@ The API provides the following main endpoints:
 ## 🧪 Testing
 
 Run the test suite:
+
 ```bash
 # Run all tests
 npm test
@@ -171,6 +185,7 @@ npm run test:coverage
 ## 🐳 Docker Support
 
 Run with Docker:
+
 ```bash
 # Build and run with docker-compose
 docker-compose up --build
@@ -198,6 +213,7 @@ docker-compose up -d
 
 ## 🔒 Security Features
 
+- **CSRF Protection**: Cross-Site Request Forgery protection with token-based validation
 - Input validation and sanitization
 - SQL injection protection
 - XSS protection
@@ -210,6 +226,7 @@ docker-compose up -d
 ## 🚀 Deployment
 
 The application is ready for deployment on platforms like:
+
 - Heroku
 - AWS EC2
 - Digital Ocean

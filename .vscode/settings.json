@@ -7,13 +7,30 @@
     "Structs"
   ],
   "cSpell.words": [
+    "aled",
+    "Ecommerce",
+    "Ecommmerce",
+    "findstr",
+    "Khaled",
+    "signup",
+    "taskkill",
     "uuidv",
-    "virtuals"
+    "virtuals",
+    "whsec"
   ],
   "mdb.presetConnections": [
     {
       "name": "Preset Connection",
       "connectionString": "mongodb://localhost:27017"
     }
-  ]
+  ],
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.validate.enable": true,
+  "typescript.suggest.autoImports": false,
+  "files.exclude": {
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/node_modules/**": true
+  }
 }

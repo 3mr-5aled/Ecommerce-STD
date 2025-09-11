@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-ecommerce-api-v1",
+  "name": "ecommerce-std-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,13 +19,16 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
-    "compression": "^1.7.4",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csrf": "^3.1.0",
+    "csurf": "^1.11.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.2.0",
     "express-mongo-sanitize": "^2.2.0",
-    "express-rate-limit": "^6.3.0",
+    "express-rate-limit": "^6.11.2",
     "express-validator": "^6.14.0",
     "helmet": "^5.1.1",
     "hpp": "^0.2.3",
@@ -56,8 +59,5 @@
     "nodemon": "^3.1.10",
     "prettier": "^2.5.1",
     "supertest": "^6.3.4"
-  },
-  "engines": {
-    "node": "^16.13.0"
   }
 }
